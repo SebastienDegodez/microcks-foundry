@@ -10,6 +10,18 @@ Changes should preserve the dependency direction described in [ARCHITECTURE.md](
 
 ## Validate changes
 
+Format Java sources with the repository's Eclipse JDT profile before committing:
+
+```shell
+mvn spotless:apply
+```
+
+Check formatting without modifying files:
+
+```shell
+mvn spotless:check
+```
+
 Run the full module build and test suite:
 
 ```shell

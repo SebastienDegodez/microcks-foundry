@@ -10,6 +10,8 @@ Before changing the project, review:
 - Use JDK 21. Keep the GitHub Actions Java setup and Maven compiler release aligned with `maven.compiler.release` in the root `pom.xml`.
 - Keep the Quarkus BOM and Maven plugin aligned through the root `quarkus.platform.version` property. Its current value is `3.20.3`.
 - Use Maven 3.9 or later.
+- Format Java with Spotless using the repository's Eclipse JDT profile: 3-space indentation and a 120-character line limit.
+- Run `mvn spotless:apply` before committing Java changes. `mvn spotless:check` and `mvn verify` must pass.
 
 ## Architecture
 

@@ -13,22 +13,15 @@ class ArchitectureTest {
 
    @BeforeAll
    static void importModules() {
-      modules = new ClassFileImporter().importPackages(
-            "io.microcks.foundry.domain",
-            "io.microcks.foundry.application",
+      modules = new ClassFileImporter().importPackages("io.microcks.foundry.domain", "io.microcks.foundry.application",
             "io.microcks.foundry.infrastructure");
    }
 
    @Test
    void domainDoesNotDependOnOuterLayersOrQuarkus() {
-      ArchRule rule = noClasses()
-            .that().resideInAPackage("io.microcks.foundry.domain..")
-            .should().dependOnClassesThat().resideInAnyPackage(
-                  "io.microcks.foundry.application..",
-                  "io.microcks.foundry.infrastructure..",
-                  "io.microcks.foundry.app..",
-                  "io.microcks.foundry.cli..",
-                  "io.quarkus..")
+      ArchRule rule = noClasses().that().resideInAPackage("io.microcks.foundry.domain..").should().dependOnClassesThat()
+            .resideInAnyPackage("io.microcks.foundry.application..", "io.microcks.foundry.infrastructure..",
+                  "io.microcks.foundry.app..", "io.microcks.foundry.cli..", "io.quarkus..")
             .as("dépendance interdite : domaine → adaptateur, cas d'usage ou Quarkus");
 
       rule.check(modules);
@@ -36,13 +29,10 @@ class ArchitectureTest {
 
    @Test
    void applicationDoesNotDependOnAdaptersOrFrameworks() {
-      ArchRule rule = noClasses()
-            .that().resideInAPackage("io.microcks.foundry.application..")
-            .should().dependOnClassesThat().resideInAnyPackage(
-                  "io.microcks.foundry.infrastructure..",
-                  "io.microcks.foundry.app..",
-                  "io.microcks.foundry.cli..",
-                  "io.quarkus..")
+      ArchRule rule = noClasses().that().resideInAPackage("io.microcks.foundry.application..").should()
+            .dependOnClassesThat()
+            .resideInAnyPackage("io.microcks.foundry.infrastructure..", "io.microcks.foundry.app..",
+                  "io.microcks.foundry.cli..", "io.quarkus..")
             .as("dépendance interdite : cas d'usage → adaptateur, point d'entrée ou Quarkus");
 
       rule.check(modules);
@@ -50,11 +40,8 @@ class ArchitectureTest {
 
    @Test
    void infrastructureDoesNotDependOnEntryPoints() {
-      ArchRule rule = noClasses()
-            .that().resideInAPackage("io.microcks.foundry.infrastructure..")
-            .should().dependOnClassesThat().resideInAnyPackage(
-                  "io.microcks.foundry.app..",
-                  "io.microcks.foundry.cli..")
+      ArchRule rule = noClasses().that().resideInAPackage("io.microcks.foundry.infrastructure..").should()
+            .dependOnClassesThat().resideInAnyPackage("io.microcks.foundry.app..", "io.microcks.foundry.cli..")
             .as("dépendance interdite : infrastructure → point d'entrée");
 
       rule.check(modules);
