@@ -25,7 +25,7 @@
     <quarkus.platform.version>3.20.3</quarkus.platform.version>
     <archunit.version>1.4.1</archunit.version>
     <junit.version>5.12.2</junit.version>
-    <spotless.version>2.39.0</spotless.version>
+    <spotless.version>3.11.0</spotless.version>
     <git.hooks.skip>false</git.hooks.skip>
   </properties>
 
