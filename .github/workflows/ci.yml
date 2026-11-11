@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Build and test all modules
+        run: mvn --batch-mode --no-transfer-progress verify
+
+  native:
+    name: Build native Quarkus executable
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Build native executable
+        run: mvn --batch-mode --no-transfer-progress -pl foundry-app -am package -Dnative -Dquarkus.native.container-build=true
+      - name: Upload native executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: foundry-app-native
+          path: foundry-app/target/*-runner
+          if-no-files-found: error
