@@ -4,7 +4,7 @@ Microcks Foundry génère des artefacts Microcks à partir de contrats d'API, de
 
 ## Architecture
 
-Le réacteur Maven garde le domaine et les cas d'usage indépendants de tout framework. Les dépendances pointent vers le domaine ; `foundry-app` et `foundry-cli` sont les points de composition.
+Le réacteur Maven garde le domaine et les cas d'usage indépendants de tout framework. Les dépendances pointent vers le domaine ; `foundry-app` et `foundry-cli` sont les points de composition. Voir [ARCHITECTURE.md](ARCHITECTURE.md) pour les frontières des modules et [CONTRIBUTING.md](CONTRIBUTING.md) pour contribuer.
 
 | Module | Rôle |
 | --- | --- |
