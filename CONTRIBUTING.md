@@ -22,7 +22,7 @@ Check formatting without modifying files:
 mvn spotless:check
 ```
 
-The repository configures `.githooks` as its local Git hook path during Maven's `validate` phase. Both `pre-commit` and `pre-push` run the formatting check; run `mvn verify` once after checkout to activate them. To skip hook-path configuration for a Maven invocation, use `-Dgit.hooks.skip=true`; this does not disable a hook path already configured locally.
+The repository configures `.githooks` as its local Git hook path during Maven's `validate` phase. Only `pre-push` runs the formatting check; run `mvn verify` once after checkout to activate it. To skip hook-path configuration for a Maven invocation, use `-Dgit.hooks.skip=true`; this does not disable a hook path already configured locally.
 
 Run the full module build and test suite:
 

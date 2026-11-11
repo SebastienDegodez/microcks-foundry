@@ -12,7 +12,7 @@ Before changing the project, review:
 - Use Maven 3.9 or later.
 - Format Java with Spotless using the repository's Eclipse JDT profile: 3-space indentation and a 120-character line limit.
 - Run `mvn spotless:apply` before committing Java changes. `mvn spotless:check` and `mvn verify` must pass.
-- The repository-local pre-commit and pre-push hooks run `mvn spotless:check`; do not bypass them to push unformatted Java.
+- The repository-local pre-push hook runs `mvn spotless:check`; do not bypass it to push unformatted Java.
 
 ## Architecture
 
