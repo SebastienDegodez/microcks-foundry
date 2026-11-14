@@ -115,7 +115,8 @@ Two algorithms with the same identifier and version stop Foundry at startup. A p
 ## Skraft
 
 `skraft-config.json` defines the shared reactor component, its gates, executable Gherkin paths and publication consent.
-Agent models use the plugin's standard tiers. The ignored `skraft-config.local.json` records local configuration
+Agent models use the plugin's standard tiers, except review lenses: the `reviewer` role runs on the `standard`
+tier because economy-tier lenses repeatedly produced unreadable verdicts. The ignored `skraft-config.local.json` records local configuration
 confirmation; each new working copy settles its own confirmation.
 
 There is no frontend component or E2E gate yet. Skraft currently warns that its `mocking-microcks-java` skill is absent;

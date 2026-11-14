@@ -1,5 +1,10 @@
 {
   "baseBranch": "main",
+  "models": {
+    "reviewer": {
+      "tier": "standard"
+    }
+  },
   "publish": {
     "pullRequest": true,
     "questionVersions": {
