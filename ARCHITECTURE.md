@@ -49,6 +49,26 @@ The test imports the domain, application, and infrastructure packages only; `fou
 
 The rules run as part of `mvn verify` and are included in GitHub Actions pull request checks. The rules planned for the domain model are listed in [Planned architecture rules](#planned-architecture-rules); they are not enforced until they are added to `ArchitectureTest`.
 
+## Test organization
+
+Tests stay in their Maven modules under `src/test/java`; resources stay under `src/test/resources`.
+Surefire runs unit tests named `*Test`, and Failsafe runs integration tests named `*IT` during `mvn verify`.
+Unit tests cover domain and application behavior. Integration tests exercise adapters and the API composition,
+including the domain and application they compose.
+
+Executable Gherkin belongs to `foundry-application/src/test/resources/feature/<name>/`.
+Its Java bindings belong to `foundry-application/src/test/java/io/microcks/foundry/application/feature/<name>/`.
+The Cucumber runner reads the whole `feature` resource folder and binding package. Cucumber and JUnit are test-scoped
+dependencies, not dependencies of the Java-only production core.
+
+PIT runs from `foundry-application`, mutating domain and application classes with tests from both modules.
+It reuses unchanged results through a local history file. The mutation script invalidates that history when test
+resources or core Maven configuration change, since PIT does not hash Gherkin resources itself.
+Adapter and API mutations are not part of this core mutation gate.
+
+The `diagnostic` classes, tests and Gherkin are temporary probes for the initial test and mutation setup, not product
+features. Replace them with real behavior and its tests before removing the probes; an empty mutation run must fail.
+
 ## Build baseline
 
 - JDK and Java release: 21, configured by `maven.compiler.release` in the root `pom.xml` and matched by CI.

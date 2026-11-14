@@ -1,0 +1,46 @@
+{
+  "baseBranch": "main",
+  "publish": {
+    "pullRequest": true,
+    "questionVersions": {
+      "pullRequest": 2
+    }
+  },
+  "components": [
+    {
+      "name": "microcks-foundry",
+      "root": ".",
+      "stack": "java",
+      "paths": {
+        "src": [
+          "foundry-domain/src/main/java",
+          "foundry-application/src/main/java",
+          "foundry-infrastructure/src/main/java",
+          "foundry-app/src/main/java",
+          "foundry-cli/src/main/java"
+        ],
+        "tests": [
+          "foundry-domain/src/test",
+          "foundry-application/src/test",
+          "foundry-infrastructure/src/test",
+          "foundry-app/src/test"
+        ]
+      },
+      "commands": {
+        "build": "mvn -B -q -DskipTests package",
+        "format": "mvn -B -q spotless:check",
+        "test": "mvn -B -q verify",
+        "architecture": "mvn -B -q -pl foundry-app -am -Dtest=ArchitectureTest -Dsurefire.failIfNoSpecifiedTests=false test",
+        "mutation": "bash scripts/mutation.sh"
+      },
+      "mutationReport": "foundry-application/target/pit-reports/mutations.xml",
+      "bdd": [
+        {
+          "runner": "foundry-application/pom.xml",
+          "features": "foundry-application/src/test/resources/feature",
+          "steps": "foundry-application/src/test/java/io/microcks/foundry/application/feature"
+        }
+      ]
+    }
+  ]
+}

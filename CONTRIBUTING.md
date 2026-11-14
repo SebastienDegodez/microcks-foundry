@@ -8,6 +8,8 @@ Changes should preserve the dependency direction described in [ARCHITECTURE.md](
 - Maven 3.9 or later
 - Docker for a local native Quarkus build
 
+When several JDKs are installed, select JDK 21 with `JAVA_HOME` and check `mvn --version` before running the gates.
+
 ## Validate changes
 
 Format Java sources with the repository's Eclipse JDT profile before committing:
@@ -29,6 +31,29 @@ Run the full module build and test suite:
 ```shell
 mvn --batch-mode --no-transfer-progress verify
 ```
+
+Unit tests use `*Test` names and run with `mvn test`. Integration tests use `*IT` names and run with Failsafe during
+`mvn verify`. Tests and resources stay in their modules' `src/test/java` and `src/test/resources` directories.
+
+Gherkin scenarios run in `foundry-application`, grouped by behavior under `src/test/resources/feature/<name>/`.
+Bindings use the matching group under `src/test/java/io/microcks/foundry/application/feature/<name>/`.
+
+Run the incremental core mutation gate:
+
+```shell
+bash scripts/mutation.sh
+```
+
+The first run analyses the core fully. Subsequent runs reuse unchanged mutations and reevaluate changed Java code
+and tests. PIT is pinned to `1.22.1`, which includes its built-in incremental history support, with the JUnit 5 plugin.
+Dependabot does not upgrade PIT to `1.23+` until a separate history plugin is configured and verified.
+The script invalidates history when test resources (including `.feature` files) or the root/domain/application POMs
+change. A failed mutation run also discards history to avoid reusing partial results. `mvn clean` clears the cache.
+The report is `foundry-application/target/pit-reports/mutations.xml`; history and its input fingerprint also live under
+that module's ignored `target` directory.
+
+The temporary `diagnostic` probe verifies this setup. It is not acceptance evidence for a product story.
+Keep the Gherkin runner and mutation configuration when replacing that probe with real behavior.
 
 Build the native Quarkus executable locally:
 
@@ -86,3 +111,12 @@ Two algorithms with the same identifier and version stop Foundry at startup. A p
 - Pull requests must pass the GitHub Actions build and architecture tests.
 - Pin GitHub Actions to full commit SHAs and retain the upstream version in a comment for Dependabot.
 - Dependabot manages Maven and GitHub Actions version updates. Keep the configured minimum action releases and JDK/Quarkus versions aligned with [AGENTS.md](AGENTS.md) and [ARCHITECTURE.md](ARCHITECTURE.md).
+
+## Skraft
+
+`skraft-config.json` defines the shared reactor component, its gates, executable Gherkin paths and publication consent.
+Agent models use the plugin's standard tiers. The ignored `skraft-config.local.json` records local configuration
+confirmation; each new working copy settles its own confirmation.
+
+There is no frontend component or E2E gate yet. Skraft currently warns that its `mocking-microcks-java` skill is absent;
+stories requiring external Microcks mocks need the applicable Java recipe before delivery.

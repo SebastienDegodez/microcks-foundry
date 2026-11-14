@@ -7,6 +7,10 @@ updates:
       day: monday
     commit-message:
       prefix: deps
+    ignore:
+      # PIT 1.23+ requires a separate history plugin for incremental analysis.
+      - dependency-name: org.pitest:pitest-maven
+        versions: [">=1.23.0"]
 
   - package-ecosystem: github-actions
     directory: /
