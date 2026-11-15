@@ -59,7 +59,7 @@ Find the bounded context first in the [domain model](ARCHITECTURE.md#domain-mode
 ## Naming
 
 - Commands are imperative verbs: `GenerateExamples`, `ApproveProposal`.
-- Queries start with `Get` or `List`: `GetProposal`, `ListPendingDecisions`.
+- Prefer a business-specific name for queries; use `Find`, `Retrieve`, or `List` where appropriate, and `Get` only when no clearer domain term fits (e.g., `ListPendingDecisions`).
 - Events are past-tense facts: `ProposalApproved`, `DivergenceDetected`.
 - Identifiers are typed value objects named `<Aggregate>Id`.
 - Algorithms keep the PRD identifiers and an explicit version, such as `boundary.values` v1. Changing an algorithm's output requires a new version.
