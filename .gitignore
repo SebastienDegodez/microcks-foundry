@@ -430,3 +430,4 @@ FodyWeavers.xsd
 # Java and Maven
 **/target/
 .quarkus/
+skraft-config.local.json

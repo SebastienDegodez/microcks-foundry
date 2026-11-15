@@ -25,6 +25,9 @@
     <quarkus.platform.version>3.20.3</quarkus.platform.version>
     <archunit.version>1.4.1</archunit.version>
     <junit.version>5.12.2</junit.version>
+    <cucumber.version>7.22.2</cucumber.version>
+    <pitest.version>1.22.1</pitest.version>
+    <pitest.junit5.version>1.2.3</pitest.junit5.version>
     <spotless.version>2.39.0</spotless.version>
     <git.hooks.skip>false</git.hooks.skip>
   </properties>
@@ -85,6 +88,20 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.cucumber</groupId>
+        <artifactId>cucumber-bom</artifactId>
+        <version>${cucumber.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>${quarkus.platform.artifact-id}</artifactId>
         <version>${quarkus.platform.version}</version>
@@ -122,6 +139,33 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>3.5.3</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>3.5.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.pitest</groupId>
+          <artifactId>pitest-maven</artifactId>
+          <version>${pitest.version}</version>
+          <configuration>
+            <skip>true</skip>
+            <outputFormats>
+              <param>XML</param>
+            </outputFormats>
+            <timestampedReports>false</timestampedReports>
+            <historyInputFile>${project.build.directory}/pit-history.bin</historyInputFile>
+            <historyOutputFile>${project.build.directory}/pit-history.bin</historyOutputFile>
+            <mutationThreshold>100</mutationThreshold>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.pitest</groupId>
+              <artifactId>pitest-junit5-plugin</artifactId>
+              <version>${pitest.junit5.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -132,6 +176,18 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
